@@ -28,7 +28,8 @@
   --you:#EC7A66; --claude:#55BFB1; --artlist:#E8BC46; --on-artlist:#2A2206; --num:#10201D; --on-you:#1B0C08;
 }
 *,*::before,*::after{box-sizing:inherit}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:calc(3.6rem + env(safe-area-inset-top,0px))}
+@media (prefers-reduced-motion: no-preference){ html{scroll-behavior:smooth} }
 body{
   margin:0; background:var(--linen); color:var(--ink);
   font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
@@ -133,6 +134,44 @@ input[type=range]{width:100%; margin:.5rem 0 0; accent-color:var(--claude)}
 .rules li{padding-left:1.1rem; border-left:2px solid var(--ink)}
 .rules b{display:block}
 .rules span{color:var(--soft); font-size:.95rem}
+/* nav */
+.toc{position:sticky; top:0; z-index:5; background:var(--linen); margin:1.4rem -1.25rem 0; padding:.6rem 1.25rem; border-bottom:1px solid var(--rule); overflow-x:auto; white-space:nowrap; scrollbar-width:none; -webkit-overflow-scrolling:touch}
+.toc::-webkit-scrollbar{display:none}
+.toc a{display:inline-block; padding:.28rem .8rem; border-radius:999px; font-size:.86rem; color:var(--soft); text-decoration:none; border:1px solid var(--rule); margin-right:.35rem}
+.toc a[aria-current="true"]{background:var(--ink); color:var(--linen); border-color:var(--ink)}
+.toc a:focus-visible, .stage-card a:focus-visible, .next:focus-visible, .copy:focus-visible{outline:2px solid var(--claude); outline-offset:2px}
+.eyebrow{display:block; margin-top:3.2rem; font-size:.8rem; font-weight:700; letter-spacing:.06em; color:var(--soft); text-decoration:none}
+a.eyebrow:hover{color:var(--ink)}
+.eyebrow + h2{margin-top:.2rem}
+
+/* stages */
+.s1{--st:var(--artlist); --on-st:var(--on-artlist)}
+.s2{--st:var(--claude); --on-st:var(--num)}
+.s3{--st:var(--ink); --on-st:var(--linen)}
+.stages{list-style:none; padding:0; margin:1.1rem 0 0; display:grid; gap:.65rem}
+.stage-card a{display:grid; grid-template-columns:2.5rem 1fr auto; column-gap:.85rem; align-items:center; padding:.9rem 1rem; background:var(--paper); border-radius:.95rem; text-decoration:none; color:inherit; border:1.5px solid transparent}
+.stage-card a:hover{border-color:var(--rule)}
+.stage-no{width:2.5rem; height:2.5rem; border-radius:50%; display:grid; place-items:center; font-family:"Noto Serif TC",serif; font-weight:700; background:var(--st); color:var(--on-st)}
+.stage-card b{display:block; font-size:1rem}
+.stage-card div span{display:block; font-size:.86rem; color:var(--soft); line-height:1.55}
+.stage-card i{font-style:normal; color:var(--soft); font-size:1.1rem}
+.stage{margin-top:1.6rem; padding:1.15rem 1.1rem 1.2rem; background:var(--paper); border-radius:1.1rem; border-top:.35rem solid var(--st)}
+.stage .tag{font-size:.8rem; font-weight:700; letter-spacing:.06em; color:var(--soft)}
+.stage h3{margin-top:.15rem; font-size:1.2rem; scroll-margin-top:calc(5.4rem + env(safe-area-inset-top,0px))}
+.stage a:not(.next){color:var(--claude); text-underline-offset:.15em}
+.facts{margin:.9rem 0 0; display:grid; gap:.35rem; font-size:.92rem}
+.facts div{display:grid; grid-template-columns:4.6rem 1fr; column-gap:.5rem}
+.facts dt{color:var(--soft)} .facts dd{margin:0}
+.stage h4{margin:1.1rem 0 0; font-size:.95rem}
+.steps{margin:.4rem 0 0; padding-left:1.35rem; display:grid; gap:.45rem}
+.steps li::marker{font-weight:700; color:var(--soft)}
+.prompt{margin-top:.9rem; border-radius:.75rem; background:var(--linen); padding:.8rem .85rem}
+.prompt-head{display:flex; justify-content:space-between; align-items:center; gap:.5rem}
+.prompt-head b{font-size:.88rem}
+.copy{font:inherit; font-size:.82rem; padding:.3rem .75rem; border-radius:999px; border:1.5px solid var(--ink); background:transparent; color:var(--ink); cursor:pointer}
+.prompt code{display:block; margin-top:.5rem; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:.8rem; line-height:1.65; color:var(--soft); overflow-wrap:anywhere; white-space:pre-wrap}
+.prompt .hint{margin:.5rem 0 0; font-size:.84rem; color:var(--soft)}
+.next{display:inline-block; margin-top:1rem; font-weight:700; color:var(--ink); text-decoration:none; border-bottom:2px solid var(--st)}
 footer{margin-top:3rem; font-size:.88rem; color:var(--soft); border-top:1px solid var(--rule); padding-top:1rem}
 </style>
 </head>
@@ -148,17 +187,87 @@ footer{margin-top:3rem; font-size:.88rem; color:var(--soft); border-top:1px soli
     </ul>
   </header>
 
-  <section aria-labelledby="once">
-    <h2 id="once">事前準備，只做一次</h2>
-    <ol class="once">
-      <li><div><b>訂閱 Artlist</b><span>每個月付費，換到一筆點數。每生成一次影片就扣一些點數。</span></div></li>
-      <li><div><b>在 Claude 的設定裡連接 Artlist</b><span>連好之後，你在對話裡說一句話，Claude 就能替你操作 Artlist，不用自己在兩個網站之間複製貼上。</span></div></li>
-      <li><div><b>建一個 Claude 專案，把規則放進去</b><span>專案像一個專屬的工作資料夾。規則寫在專案的說明欄，之後在這個專案開的每個對話都會自動照做，不用再貼一次。內容在下面。</span></div></li>
+  <nav class="toc" aria-label="頁面目錄">
+    <a href="#start">從這裡開始</a><a href="#stage1">第一階段</a><a href="#stage2">第二階段</a><a href="#stage3">第三階段</a><a href="#map">流程圖</a><a href="#say">跟 Claude 說</a><a href="#talk">對話示範</a><a href="#cost">費用</a><a href="#rules">原則</a>
+  </nav>
+
+  <section aria-labelledby="start">
+    <h2 id="start">從這裡開始</h2>
+    <p>不用一次把所有東西設定好。分三個階段，每一階段都能做出可以發布的影片，覺得順手了再往下一步。</p>
+    <ol class="stages">
+      <li class="stage-card s1"><a href="#stage1"><span class="stage-no">1</span><div><b>只用 Artlist，做出第一支</b><span>需要 Artlist 帳號。一次約 480 點。</span></div><i aria-hidden="true">↓</i></a></li>
+      <li class="stage-card s2"><a href="#stage2"><span class="stage-no">2</span><div><b>讓 Claude 幫你寫提示詞</b><span>再加一個 Claude 帳號。你自己貼到 Artlist。</span></div><i aria-hidden="true">↓</i></a></li>
+      <li class="stage-card s3"><a href="#stage3"><span class="stage-no">3</span><div><b>讓 Claude 直接操作 Artlist</b><span>連接兩邊的帳號，在對話裡就能做完。</span></div><i aria-hidden="true">↓</i></a></li>
     </ol>
+
+    <article class="stage s1" aria-labelledby="stage1">
+      <div class="tag">第一階段</div>
+      <h3 id="stage1">只用 Artlist，做出第一支</h3>
+      <p>目標是親眼看到「我的商品照可以變成這樣」，順便摸熟 Artlist 的畫面。這一階段完全不需要 Claude。</p>
+      <dl class="facts">
+        <div><dt>需要</dt><dd>Artlist 帳號，一張商品原圖</dd></div>
+        <div><dt>花費</dt><dd>每次約 480 點。Starter 月繳約 NT$640，大約可以試 34 次。</dd></div>
+        <div><dt>完成標準</dt><dd>做出一支你願意發布的影片</dd></div>
+      </dl>
+      <h4>步驟</h4>
+      <ol class="steps">
+        <li>註冊 Artlist。平台有提供少量免費試用，先試一次再決定要不要訂閱，以官網目前的方案為準。</li>
+        <li>到 References 新增一個 Prop，上傳一張商品原圖，取一個好記的英文名稱。一款商品存一個。</li>
+        <li>回到 Video，模型選 <b>Seedance 2.0 Mini</b>，設定選 <b>9:16、720p、4 秒</b>。</li>
+        <li>貼上下面的提示詞，把「@商品名稱」刪掉，重新打一個 @，從選單選你剛存的商品。</li>
+        <li>按 Generate。完成後對照實品，檢查顏色、珠子順序、編織紋路是不是一樣。</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-head"><b>第一支影片的提示詞</b><button type="button" class="copy" data-copy="p1">複製</button></div>
+        <code id="p1">A woman's slender wrist wearing the exact bracelet from @商品名稱, colors, bead order and pattern identical. Her hand rests on natural linen beside a wooden board, warm golden afternoon sunlight. Only one hand and one forearm visible. Medium close-up, do not zoom in too close. Very slow camera drift, soft light moves gently across her hand. Calm, warm, handcrafted mood. Keep the bracelet unchanged. No text, no logo.</code>
+        <p class="hint">第一次先不放品牌字，成功率比較高。想換場景，只改「linen beside a wooden board」那一段就好。</p>
+      </div>
+      <a class="next" href="#stage2">做出滿意的一支了？看第二階段</a>
+    </article>
+
+    <article class="stage s2" aria-labelledby="stage2">
+      <div class="tag">第二階段</div>
+      <h3 id="stage2">讓 Claude 幫你寫提示詞</h3>
+      <p>想換不同場景、氣氛，又不想自己寫英文時，就進到這一步。Claude 負責寫，你負責貼到 Artlist。</p>
+      <dl class="facts">
+        <div><dt>需要</dt><dd>Claude 帳號。免費帳號也能建專案，最多五個。</dd></div>
+        <div><dt>花費</dt><dd>Artlist 的點數和第一階段一樣</dd></div>
+        <div><dt>完成標準</dt><dd>說一句話，就拿到一段可以直接貼的提示詞</dd></div>
+      </dl>
+      <h4>步驟</h4>
+      <ol class="steps">
+        <li>在 Claude 建一個專案，名稱例如「XI CRYSTAL 影片」。</li>
+        <li>把<a href="#rules-card">專案規則</a>整段貼進專案的說明欄。商品對照要換成你在 Artlist 存的名稱。</li>
+        <li>在專案裡開新對話，說「幫我做蠟線編織手鍊的影片，提示詞我自己貼到 Artlist」。</li>
+        <li>回答 Claude 問的<a href="#five">五件事</a>，拿到英文提示詞。</li>
+        <li>複製到 Artlist，用 @ 選商品，按 Generate。</li>
+      </ol>
+      <a class="next" href="#stage3">每週都在做了？看第三階段</a>
+    </article>
+
+    <article class="stage s3" aria-labelledby="stage3">
+      <div class="tag">第三階段</div>
+      <h3 id="stage3">讓 Claude 直接操作 Artlist</h3>
+      <p>連接之後，不用在兩個網站之間複製貼上。你在對話裡說要什麼，Claude 寫好提示詞、報點數，你說「送出」它就去生成。影片品質和第二階段一樣，省下的是來回操作的時間。</p>
+      <dl class="facts">
+        <div><dt>需要</dt><dd>Artlist 付費方案，以及可以新增連接器的 Claude 帳號，依方案而定，請在設定裡確認。</dd></div>
+        <div><dt>花費</dt><dd>只能用點數，Artlist 的無限生成在這裡不適用</dd></div>
+        <div><dt>完成標準</dt><dd>在對話裡從頭到尾做完一支</dd></div>
+      </dl>
+      <h4>步驟</h4>
+      <ol class="steps">
+        <li>到 Claude 的設定，新增連接器，網址填 <b>https://mcp.artlist.io/mcp</b>，登入 Artlist 完成授權。</li>
+        <li>回到第二階段的專案，開新對話，說一句要做哪一款。</li>
+        <li>確認 Claude 給的提示詞和點數，說「送出」。</li>
+        <li>看草稿，要改就說改哪裡，滿意了說「出高畫質」。</li>
+      </ol>
+      <a class="next" href="#map">看完整的流程圖和對話示範</a>
+    </article>
   </section>
 
   <section aria-labelledby="map">
-    <h2 id="map">每次做一支影片</h2>
+    <a class="eyebrow" href="#stage3">第三階段的樣子</a>
+    <h2 id="map">每次做一支影片的流程</h2>
     <div class="diagram">
       <svg viewBox="0 0 360 564" role="img" aria-label="流程圖：八個步驟分別由你、Claude、Artlist 負責，看草稿不滿意就回到步驟 2"><title>流程圖</title>
 <text class="lane-name" x="46" y="20" fill="var(--you)">你</text>
@@ -201,10 +310,11 @@ footer{margin-top:3rem; font-size:.88rem; color:var(--soft); border-top:1px soli
   </section>
 
   <section aria-labelledby="say">
+    <a class="eyebrow" href="#stage2">第二、三階段</a>
     <h2 id="say">怎麼跟 Claude 說</h2>
     <p>你不用自己寫英文，也不用背任何格式。在專案裡開一個新對話，說一句「幫我做蠟線編織手鍊的影片」就可以開始。Claude 會問你下面五件事，再把答案寫成給影片模型看的英文拍攝指令，這段指令叫「提示詞」。</p>
 
-    <h3>Claude 每次會問你的五件事</h3>
+    <h3 id="five">Claude 每次會問你的五件事</h3>
     <div class="card say">
       <ul class="five">
         <li><b>哪一款</b><span>蠟線編織手鍊</span></li>
@@ -215,8 +325,8 @@ footer{margin-top:3rem; font-size:.88rem; color:var(--soft); border-top:1px soli
       </ul>
     </div>
 
-    <h3>放進專案說明的內容，只寫一次</h3>
-    <p>把下面這段貼進 Claude 專案的說明欄。之後在這個專案開的每個對話都會自動照做。</p>
+    <h3 id="rules-card">放進專案說明的內容，只寫一次</h3>
+    <p>把下面這段貼進 Claude 專案的說明欄。之後在這個專案開的每個對話都會自動照做。第 4、5 條是第三階段才用得到的，第二階段時 Claude 會改成直接給你提示詞。</p>
     <div class="card rule">
       <p style="margin:0">這個專案用來做 XI CRYSTAL STUDIO 的 IG Reels 短影片，生成工具是 Artlist。品牌風格是自然光、亞麻布、木頭的溫暖手作感。每次請照這些規則：</p>
       <ol class="fixed">
@@ -242,6 +352,7 @@ footer{margin-top:3rem; font-size:.88rem; color:var(--soft); border-top:1px soli
   </section>
 
   <section aria-labelledby="talk">
+    <a class="eyebrow" href="#stage3">第三階段</a>
     <h2 id="talk">對話大概長這樣</h2>
     <div class="chat" role="group" aria-label="示意對話">
       <div class="msg me">幫我做蠟線編織手鍊的影片。</div>
@@ -264,6 +375,7 @@ footer{margin-top:3rem; font-size:.88rem; color:var(--soft); border-top:1px soli
   </section>
 
   <section aria-labelledby="cost">
+    <span class="eyebrow">每個階段都適用</span>
     <h2 id="cost">一支影片要花多少錢</h2>
     <p>花費取決於三件事：影片幾秒、修改幾次、用哪個等級的模型。調整下面的選項，看看差別。</p>
     <div class="calc">
@@ -321,11 +433,13 @@ footer{margin-top:3rem; font-size:.88rem; color:var(--soft); border-top:1px soli
   </section>
 
   <section aria-labelledby="rules">
-    <h2 id="rules">四個原則</h2>
+    <span class="eyebrow">每個階段都適用</span>
+    <h2 id="rules">五個原則</h2>
     <ul class="rules">
       <li><b>一支影片只放一款商品</b><span>兩款一起放，模型容易把它們混在一起。</span></li>
       <li><b>先看點數，再說「送出」</b><span>點數在送出時就扣，生成開始後不能取消。</span></li>
       <li><b>生成的字要檢查</b><span>英文品牌名可以直接請模型生成，但要看拼字對不對。中文字或指定字體，改用後製比較穩。</span></li>
+      <li><b>每支都要對照實品，發布前看 IG 的 AI 標示規定</b><span>影片和實品不一樣，客人收到會覺得被誤導。寫實的 AI 影片，IG 可能要求標示，主動標示也比較讓人信任。</span></li>
       <li><b>只上傳商品照</b><span>不上傳真人的臉，也不上傳私人或機密的內容。</span></li>
     </ul>
   </section>
@@ -369,6 +483,24 @@ footer{margin-top:3rem; font-size:.88rem; color:var(--soft); border-top:1px soli
   seg('plan','plan'); seg('bill','bill');
   $('sec').addEventListener('input',render); $('rev').addEventListener('input',render);
   render();
+  Array.prototype.forEach.call(document.querySelectorAll('[data-copy]'),function(btn){
+    btn.addEventListener('click',function(){
+      var el=$(btn.dataset.copy), text=el.innerText;
+      function done(ok){ btn.textContent=ok?'已複製':'請長按選取'; setTimeout(function(){btn.textContent='複製'},1800); }
+      function fallback(){
+        try{ var r=document.createRange(); r.selectNodeContents(el); var s=window.getSelection(); s.removeAllRanges(); s.addRange(r); var ok=document.execCommand('copy'); s.removeAllRanges(); done(ok); }catch(e){ done(false); }
+      }
+      try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(function(){done(true)},fallback); } else fallback(); }catch(e){ fallback(); }
+    });
+  });
+  try{
+    var links=Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+    var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ links.forEach(function(a){a.removeAttribute('aria-current')}); var a=map[e.target.id]; if(a){ a.setAttribute('aria-current','true'); var nav=a.parentNode; nav.scrollLeft=a.offsetLeft-nav.clientWidth/2+a.offsetWidth/2; } } });
+    },{rootMargin:'-15% 0px -75% 0px'});
+    Object.keys(map).forEach(function(id){ var t=document.getElementById(id); if(t) io.observe(t); });
+  }catch(e){}
 })();
 </script>
 </body>
