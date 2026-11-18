@@ -28,7 +28,7 @@
   --you:#EC7A66; --claude:#55BFB1; --artlist:#E8BC46; --on-artlist:#2A2206; --num:#10201D; --on-you:#1B0C08;
 }
 *,*::before,*::after{box-sizing:inherit}
-html{scroll-padding-top:calc(3.6rem + env(safe-area-inset-top,0px))}
+html{scroll-padding-top:calc(1rem + env(safe-area-inset-top,0px))}
 @media (prefers-reduced-motion: no-preference){ html{scroll-behavior:smooth} }
 body{
   margin:0; background:var(--linen); color:var(--ink);
@@ -149,15 +149,15 @@ a.eyebrow:hover{color:var(--ink)}
 .s2{--st:var(--claude); --on-st:var(--num)}
 .s3{--st:var(--ink); --on-st:var(--linen)}
 .stages{list-style:none; padding:0; margin:1.1rem 0 0; display:grid; gap:.65rem}
-.stage-card a{display:grid; grid-template-columns:2.5rem 1fr auto; column-gap:.85rem; align-items:center; padding:.9rem 1rem; background:var(--paper); border-radius:.95rem; text-decoration:none; color:inherit; border:1.5px solid transparent}
+.stage-card a{display:grid; grid-template-columns:1fr auto; column-gap:.85rem; align-items:center; padding:.9rem 1rem; background:var(--paper); border-radius:.95rem; text-decoration:none; color:inherit; border:1.5px solid transparent}
 .stage-card a:hover{border-color:var(--rule)}
-.stage-no{width:2.5rem; height:2.5rem; border-radius:50%; display:grid; place-items:center; font-family:"Noto Serif TC",serif; font-weight:700; background:var(--st); color:var(--on-st)}
+.stage-no{display:inline-block; padding:.12rem .65rem; border-radius:999px; font-size:.8rem; font-weight:700; letter-spacing:.04em; background:var(--st); color:var(--on-st); margin-bottom:.35rem}
 .stage-card b{display:block; font-size:1rem}
-.stage-card div span{display:block; font-size:.86rem; color:var(--soft); line-height:1.55}
+.stage-card div span:not(.stage-no){display:block; font-size:.86rem; color:var(--soft); line-height:1.55}
 .stage-card i{font-style:normal; color:var(--soft); font-size:1.1rem}
 .stage{margin-top:1.6rem; padding:1.15rem 1.1rem 1.2rem; background:var(--paper); border-radius:1.1rem; border-top:.35rem solid var(--st)}
 .stage .tag{font-size:.8rem; font-weight:700; letter-spacing:.06em; color:var(--soft)}
-.stage h3{margin-top:.15rem; font-size:1.2rem; scroll-margin-top:calc(5.4rem + env(safe-area-inset-top,0px))}
+.stage h3{margin-top:.15rem; font-size:1.2rem; scroll-margin-top:calc(2.6rem + env(safe-area-inset-top,0px))}
 .stage a:not(.next){color:var(--claude); text-underline-offset:.15em}
 .facts{margin:.9rem 0 0; display:grid; gap:.35rem; font-size:.92rem}
 .facts div{display:grid; grid-template-columns:4.6rem 1fr; column-gap:.5rem}
@@ -179,25 +179,15 @@ footer{margin-top:3rem; font-size:.88rem; color:var(--soft); border-top:1px soli
 <main>
   <header>
     <h1>一張商品照，變成一支 Reels</h1>
-    <p class="lede">三個角色各做一段，像三條線編成一條手鍊。你負責挑選和決定，Claude 當導演，Artlist 當攝影棚。</p>
-    <ul class="roles">
-      <li><i class="cord you"></i><div><b>你</b> <span>選商品照，說想要的畫面，決定要不要送出</span></div></li>
-      <li><i class="cord claude"></i><div><b>Claude</b> <span>把你的想法寫成拍攝指令，替你操作 Artlist</span></div></li>
-      <li><i class="cord artlist"></i><div><b>Artlist</b> <span>用影片模型把畫面生成出來</span></div></li>
-    </ul>
   </header>
 
-  <nav class="toc" aria-label="頁面目錄">
-    <a href="#start">從這裡開始</a><a href="#stage1">第一階段</a><a href="#stage2">第二階段</a><a href="#stage3">第三階段</a><a href="#map">流程圖</a><a href="#say">跟 Claude 說</a><a href="#talk">對話示範</a><a href="#cost">費用</a><a href="#rules">原則</a>
-  </nav>
-
   <section aria-labelledby="start">
-    <h2 id="start">從這裡開始</h2>
+    <h2 id="start" style="margin-top:1.6rem">從這裡開始</h2>
     <p>不用一次把所有東西設定好。分三個階段，每一階段都能做出可以發布的影片，覺得順手了再往下一步。</p>
     <ol class="stages">
-      <li class="stage-card s1"><a href="#stage1"><span class="stage-no">1</span><div><b>只用 Artlist，做出第一支</b><span>需要 Artlist 帳號。一次約 480 點。</span></div><i aria-hidden="true">↓</i></a></li>
-      <li class="stage-card s2"><a href="#stage2"><span class="stage-no">2</span><div><b>讓 Claude 幫你寫提示詞</b><span>再加一個 Claude 帳號。你自己貼到 Artlist。</span></div><i aria-hidden="true">↓</i></a></li>
-      <li class="stage-card s3"><a href="#stage3"><span class="stage-no">3</span><div><b>讓 Claude 直接操作 Artlist</b><span>連接兩邊的帳號，在對話裡就能做完。</span></div><i aria-hidden="true">↓</i></a></li>
+      <li class="stage-card s1"><a href="#stage1"><div><span class="stage-no">第一階段</span><b>只用 Artlist，做出第一支</b><span>需要 Artlist 帳號。一次約 480 點。</span></div><i aria-hidden="true">↓</i></a></li>
+      <li class="stage-card s2"><a href="#stage2"><div><span class="stage-no">第二階段</span><b>讓 Claude 幫你寫提示詞</b><span>再加一個 Claude 帳號。你自己貼到 Artlist。</span></div><i aria-hidden="true">↓</i></a></li>
+      <li class="stage-card s3"><a href="#stage3"><div><span class="stage-no">第三階段</span><b>讓 Claude 直接操作 Artlist</b><span>連接兩邊的帳號，在對話裡就能做完。</span></div><i aria-hidden="true">↓</i></a></li>
     </ol>
 
     <article class="stage s1" aria-labelledby="stage1">
@@ -493,14 +483,6 @@ footer{margin-top:3rem; font-size:.88rem; color:var(--soft); border-top:1px soli
       try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(function(){done(true)},fallback); } else fallback(); }catch(e){ fallback(); }
     });
   });
-  try{
-    var links=Array.prototype.slice.call(document.querySelectorAll('.toc a'));
-    var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
-    var io=new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ links.forEach(function(a){a.removeAttribute('aria-current')}); var a=map[e.target.id]; if(a){ a.setAttribute('aria-current','true'); var nav=a.parentNode; nav.scrollLeft=a.offsetLeft-nav.clientWidth/2+a.offsetWidth/2; } } });
-    },{rootMargin:'-15% 0px -75% 0px'});
-    Object.keys(map).forEach(function(id){ var t=document.getElementById(id); if(t) io.observe(t); });
-  }catch(e){}
 })();
 </script>
 </body>
